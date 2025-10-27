@@ -75,6 +75,8 @@ CLI-based validation exercise with pure functions and pytest tests.
 - Upload validation (txt only, ≤5 MB).  
 - Edit/delete only by owner.  
 - CORS restricted to `localhost:5173`.
+- Input sanitization and URL validation.
+- Use rate-limiting to prevent abuse.
 
 ---
 
