@@ -4,3 +4,4 @@ from django.apps import AppConfig
 class UrlshortenerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.urlshortener'
+    label = 'urlshortener'  # This is the app_label used in model references

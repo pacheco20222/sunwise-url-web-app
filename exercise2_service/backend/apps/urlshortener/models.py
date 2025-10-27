@@ -19,7 +19,7 @@ class ShortURL(models.Model):
         help_text="The original URL to be shortened",
     )
     
-    is_private = models.BooleandField(
+    is_private = models.BooleanField(
         default=False,
         help_text="When true, requires authentication token to access",
     )
