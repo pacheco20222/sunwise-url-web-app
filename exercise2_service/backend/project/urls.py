@@ -5,26 +5,20 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
+from apps.urlshortener.views import RedirectView
 
 urlpatterns = [
-    # Django Admin Panel
-    # Access at: http://localhost:8000/admin/
     path('admin/', admin.site.urls),
     
-    # API Documentation (Swagger/OpenAPI)
-    # - Schema (JSON): http://localhost:8000/api/schema/
-    # - Swagger UI: http://localhost:8000/api/docs/
-    # - ReDoc UI: http://localhost:8000/api/redoc/
+    # API Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
-    # Authentication endpoints
+    # API endpoints
     path('api/auth/', include('apps.accounts.urls')),
+    path('api/urls/', include('apps.urlshortener.urls')),
     
-    # URL Shortener endpoints will be added in next phase
-    # path('api/urls/', include('apps.urlshortener.urls')),
-    
-    # Short URL redirect will be added in next phase
-    # path('<str:short_code>/', RedirectView, name='redirect'),
+    # Redirect short codes (must be last)
+    path('<str:short_code>/', RedirectView.as_view(), name='redirect'),
 ]
