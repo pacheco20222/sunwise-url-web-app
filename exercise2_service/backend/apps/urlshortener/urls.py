@@ -5,12 +5,14 @@ from .views import (
     URLDetailView,
     URLUpdateView,
     URLDeleteView,
+    BulkUploadView,
 )
 
 app_name = 'urlshortener'
 
 urlpatterns = [
     path('shorten/', ShortenURLView.as_view(), name='shorten'),
+    path('bulk/', BulkUploadView.as_view(), name='bulk-upload'),
     path('', URLListView.as_view(), name='list'),
     path('<int:pk>/', URLDetailView.as_view(), name='detail'),
     path('<int:pk>/update/', URLUpdateView.as_view(), name='update'),

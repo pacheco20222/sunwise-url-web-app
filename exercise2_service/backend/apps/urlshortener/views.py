@@ -104,3 +104,26 @@ class RedirectView(APIView):
         short_url.increment_views()
         
         return redirect(short_url.target_url)
+
+
+class BulkUploadView(APIView):
+    """Bulk URL upload from .txt file"""
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    throttle_scope = 'bulk_upload'
+    
+    def post(self, request):
+        from .serializers import BulkURLSerializer
+        
+        serializer = BulkURLSerializer(
+            data=request.data,
+            context={'request': request}
+        )
+        serializer.is_valid(raise_exception=True)
+        
+        # Process the file
+        results = serializer.process_file(
+            serializer.validated_data['file'],
+            user=request.user if request.user.is_authenticated else None
+        )
+        
+        return Response(results, status=status.HTTP_200_OK)
