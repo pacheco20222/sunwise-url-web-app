@@ -45,15 +45,18 @@ class ShortenURLView(generics.CreateAPIView):
 class URLListView(generics.ListAPIView):
     """List URLs with pagination"""
     serializer_class = ShortURLSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
     
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:
+            # Authenticated users see their own URLs (public + private)
             if user.is_staff:
                 return ShortURL.objects.all().order_by('-created_at')
             return ShortURL.objects.filter(owner=user).order_by('-created_at')
-        return ShortURL.objects.none()
+        else:
+            # Unauthenticated users see ALL public URLs
+            return ShortURL.objects.filter(is_private=False).order_by('-created_at')
 
 
 class URLDetailView(generics.RetrieveAPIView):
@@ -84,13 +87,11 @@ class RedirectView(APIView):
         short_url = get_object_or_404(ShortURL, short_code=short_code)
         
         # Check if private URL requires authentication
-        if short_url.is_private:
-            token = request.query_params.get('token')
-            if not token or not request.user.is_authenticated:
-                return Response(
-                    {'error': 'Authentication required for private URL'},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
+        if short_url.is_private and not request.user.is_authenticated:
+            return Response(
+                {'error': 'Authentication required for private URL. Please log in.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
         
         # Track visit
         URLVisit.objects.create(
