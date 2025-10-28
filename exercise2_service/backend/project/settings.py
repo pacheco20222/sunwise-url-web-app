@@ -193,3 +193,7 @@ MAX_URLS_PER_UPLOAD = 1000
 # ==============================================================================
 
 AUTH_USER_MODEL = 'accounts.User'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

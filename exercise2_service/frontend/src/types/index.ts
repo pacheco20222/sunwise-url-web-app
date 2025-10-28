@@ -21,6 +21,11 @@ export interface ShortURL {
   short_url: string;
   target_url: string;
   is_private: boolean;
+  owner?: {
+    id: number;
+    username: string;
+    email: string;
+  };
   owner_email?: string;
   views: number;
   created_at: string;

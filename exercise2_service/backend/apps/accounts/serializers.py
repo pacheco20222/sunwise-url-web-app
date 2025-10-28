@@ -83,13 +83,8 @@ class UserLoginSerializer(serializers.Serializer):
                 'Email or Password are incorrect.'
             )
         
-        user = authenticate(
-            request=self.context.get('request'),
-            username=user.username,
-            password=password
-        )
-        
-        if not user:
+        # Check password directly instead of using authenticate
+        if not user.check_password(password):
             raise serializers.ValidationError(
                 'Email or Password are incorrect.'
             )

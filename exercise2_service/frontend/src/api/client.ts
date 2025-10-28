@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+// Use relative path for Docker deployment (nginx proxy), fallback to direct backend URL for development
+const API_URL = import.meta.env.VITE_API_URL || (
+  window.location.hostname === 'localhost' && window.location.port === '5173'
+    ? 'http://localhost:8000/api'  // Development mode (Vite dev server)
+    : '/api'  // Production mode (Docker with nginx)
+);
 
 const api = axios.create({
   baseURL: API_URL,

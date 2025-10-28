@@ -33,7 +33,8 @@ export const Dashboard = () => {
   const { user } = useAuth();
   const [targetUrl, setTargetUrl] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
-  const [urls, setUrls] = useState<ShortURL[]>([]);
+  const [myUrls, setMyUrls] = useState<ShortURL[]>([]);
+  const [publicUrls, setPublicUrls] = useState<ShortURL[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState('');
@@ -49,7 +50,16 @@ export const Dashboard = () => {
       const response = await urlAPI.list();
       // Handle paginated response
       const data = response.data;
-      setUrls(Array.isArray(data) ? data : data.results || []);
+      const allUrls = Array.isArray(data) ? data : data.results || [];
+      
+      // Separate user's URLs and public URLs from others
+      const userUrls = allUrls.filter((url: ShortURL) => url.owner?.id === user?.id);
+      const otherPublicUrls = allUrls.filter((url: ShortURL) => 
+        !url.is_private && url.owner?.id !== user?.id
+      );
+      
+      setMyUrls(userUrls);
+      setPublicUrls(otherPublicUrls);
     } catch (err: any) {
       setError('Failed to fetch URLs');
     } finally {
@@ -68,7 +78,7 @@ export const Dashboard = () => {
         target_url: targetUrl,
         is_private: isPrivate,
       });
-      setUrls([response.data, ...urls]);
+      setMyUrls([response.data, ...myUrls]);
       setUrlCount(urlCount + 1); // Update count live
       setSuccess('URL shortened successfully!');
       setTargetUrl('');
@@ -98,7 +108,7 @@ export const Dashboard = () => {
 
     try {
       await urlAPI.delete(id);
-      setUrls(urls.filter((url) => url.id !== id));
+      setMyUrls(myUrls.filter((url) => url.id !== id));
       setUrlCount(urlCount - 1); // Update count live
       setSuccess('URL deleted successfully');
     } catch (err: any) {
@@ -173,8 +183,8 @@ export const Dashboard = () => {
         </Box>
       </Paper>
 
-      {/* URLs Table */}
-      <Paper elevation={3} sx={{ p: 3 }}>
+      {/* My URLs Table */}
+      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
           Your Shortened URLs
         </Typography>
@@ -183,7 +193,7 @@ export const Dashboard = () => {
           <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
             <CircularProgress />
           </Box>
-        ) : urls.length === 0 ? (
+        ) : myUrls.length === 0 ? (
           <Typography variant="body1" color="text.secondary" sx={{ p: 4, textAlign: 'center' }}>
             No URLs yet. Shorten your first URL above!
           </Typography>
@@ -201,7 +211,7 @@ export const Dashboard = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {urls.map((url) => (
+                {myUrls.map((url) => (
                   <TableRow key={url.id}>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -263,6 +273,78 @@ export const Dashboard = () => {
           </TableContainer>
         )}
       </Paper>
+
+      {/* Public URLs from Other Users */}
+      {publicUrls.length > 0 && (
+        <Paper elevation={3} sx={{ p: 3 }}>
+          <Typography variant="h5" gutterBottom>
+            Public URLs from Community
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            These are public URLs created by other users
+          </Typography>
+
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Short URL</TableCell>
+                  <TableCell>Target URL</TableCell>
+                  <TableCell>Owner</TableCell>
+                  <TableCell>Views</TableCell>
+                  <TableCell>Created</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {publicUrls.map((url) => (
+                  <TableRow key={url.id}>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography variant="body2" fontFamily="monospace">
+                          {url.short_url}
+                        </Typography>
+                        <Tooltip title="Copy short URL">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleCopy(url.short_url)}
+                          >
+                            <CopyIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          maxWidth: 300,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {url.target_url}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary">
+                        Anonymous
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <ViewsIcon fontSize="small" color="action" />
+                        <Typography variant="body2">{url.views}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{formatDate(url.created_at)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
     </Container>
   );
 };
