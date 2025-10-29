@@ -1,0 +1,24 @@
+# Docker Compose for PostgreSQL Only (Development)
+# Use this for manual backend/frontend setup when you don't want to install PostgreSQL locally
+# 
+# Start: docker-compose -f docker-compose.dev.yml up -d
+# Stop:  docker-compose -f docker-compose.dev.yml down
+# Reset: docker-compose -f docker-compose.dev.yml down -v
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: urlshortener_dev_db
+    environment:
+      POSTGRES_DB: urlshortener
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_dev_data:

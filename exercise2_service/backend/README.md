@@ -701,6 +701,12 @@ SHORT_CODE_LENGTH=6
 BASE_URL=http://localhost:8000
 ```
 
+> **Important:** The `CORS_ALLOWED_ORIGINS` setting must match your frontend URL. If Vite assigns a different port (e.g., 5174, 5175), update this value accordingly:
+> ```env
+> CORS_ALLOWED_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
+> ```
+> This is necessary to allow the frontend to make requests to the backend API.
+
 ### Settings Modules
 
 The `project/settings.py` file uses `django-environ` to load environment variables:

@@ -103,9 +103,13 @@ Docker proporciona la forma más fácil de ejecutar toda la aplicación.
    ```
 
 4. **Acceder a la aplicación:**
-   - Frontend: http://localhost
+   
+   **Con Docker:**
+   - Frontend: http://localhost (nginx sirve en el puerto 80)
    - API Backend: http://localhost:8000
    - Documentación API: http://localhost:8000/api/docs/
+   
+   > **Nota:** Docker usa nginx como proxy inverso para servir el frontend en el puerto 80, por eso accedes en `http://localhost` sin especificar puerto.
 
 5. **Detener la aplicación:**
    ```bash
@@ -176,6 +180,11 @@ Si prefieres ejecutar la aplicación sin Docker:
    BASE_URL=http://localhost:8000
    ```
 
+   > **Importante:** Si Vite asigna un puerto diferente (ej. 5174, 5175), actualiza `CORS_ALLOWED_ORIGINS` para coincidir:
+   > ```env
+   > CORS_ALLOWED_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
+   > ```
+
 6. **Ejecutar migraciones:**
    ```bash
    python manage.py migrate
@@ -210,13 +219,17 @@ Si prefieres ejecutar la aplicación sin Docker:
    npm run dev
    ```
    
-   El frontend estará disponible en http://localhost:5173
+   El frontend estará disponible en http://localhost:5173 (o el siguiente puerto disponible si 5173 está en uso)
+   
+   > **Nota:** Vite usará automáticamente el siguiente puerto disponible (5174, 5175, etc.) si 5173 está ocupado. Verifica la salida en la terminal para la URL real y actualiza la variable `CORS_ALLOWED_ORIGINS` en el archivo `.env` del backend en consecuencia.
 
 ## Uso
 
 ### Crear URLs Públicas
 
-1. Navegar a la página principal (http://localhost o http://localhost:5173)
+**Con Docker:** Navega a http://localhost (nginx en puerto 80)
+
+**Sin Docker:** Navega a http://localhost:5173 (o el puerto de tu servidor de desarrollo Vite)
 2. Ingresar una URL larga en el campo de entrada
 3. Hacer clic en "Shorten URL"
 4. Copiar la URL corta generada
