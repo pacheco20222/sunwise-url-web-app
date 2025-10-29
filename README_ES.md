@@ -8,17 +8,102 @@ Una aplicación completa de acortamiento de URLs construida con Django REST Fram
 
 ## Tabla de Contenidos
 
-- [Características](#características)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Requisitos Previos](#requisitos-previos)
-- [Instalación y Configuración](#instalación-y-configuración)
-  - [Opción 1: Usando Docker (Recomendado)](#opción-1-usando-docker-recomendado)
-  - [Opción 2: Configuración Manual](#opción-2-configuración-manual)
-- [Uso](#uso)
-- [Documentación de la API](#documentación-de-la-api)
-- [Pruebas](#pruebas)
-- [Solución de Problemas](#solución-de-problemas)
-- [Ejercicio 1](#ejercicio-1)
+- [Ejercicio 1: Dirección del Espiral en Cuadrícula](#ejercicio-1-dirección-del-espiral-en-cuadrícula)
+- [Ejercicio 2: Servicio Acortador de URLs](#ejercicio-2-servicio-acortador-de-urls)
+  - [Características](#características)
+  - [Estructura del Proyecto](#estructura-del-proyecto)
+  - [Requisitos Previos](#requisitos-previos)
+  - [Instalación y Configuración](#instalación-y-configuración)
+  - [Uso](#uso)
+  - [Documentación de la API](#documentación-de-la-api)
+  - [Pruebas](#pruebas)
+  - [Solución de Problemas](#solución-de-problemas)
+
+---
+
+## Ejercicio 1: Dirección del Espiral en Cuadrícula
+
+Una solución en Python para el problema de caminar en espiral sobre una cuadrícula.
+
+### Descripción del Problema
+
+Comenzando en la esquina superior izquierda de una cuadrícula N x M y mirando hacia la derecha, caminas una casilla a la vez en la dirección que estás mirando. Si alcanzas el límite de la cuadrícula o si la siguiente casilla que estás por visitar ya ha sido visitada, giras a la derecha. Te detienes cuando todas las casillas han sido visitadas.
+
+**Pregunta:** ¿En qué dirección estarás mirando cuando te detengas?
+
+**Ejemplo:** Para una cuadrícula 3x3, el camino es: (0,0) → (0,1) → (0,2) → (1,2) → (2,2) → (2,1) → (2,0) → (1,0) → (1,1). Dirección final: **Derecha (R)**
+
+### Especificación de Entrada
+
+- Primera línea: T (número de casos de prueba)
+- Siguientes T líneas: Dos enteros N y M (filas y columnas)
+- Restricciones: 1 ≤ T ≤ 5000, 1 ≤ N, M ≤ 10^9
+
+### Especificación de Salida
+
+T líneas con la dirección final: **L** (izquierda), **R** (derecha), **U** (arriba), o **D** (abajo)
+
+### Ejemplo
+
+**Entrada:**
+```
+4
+1 1
+2 2
+3 1
+3 3
+```
+
+**Salida:**
+```
+R
+L
+D
+R
+```
+
+### Ejecutar Ejercicio 1
+
+1. **Navegar al directorio exercise1:**
+   ```bash
+   cd exercise1_python
+   ```
+
+2. **Instalar dependencias (opcional, solo para pruebas):**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Ejecutar con el archivo de entrada proporcionado:**
+   ```bash
+   python src/main.py < input.txt
+   ```
+
+4. **O ejecutar con entrada personalizada:**
+   ```bash
+   echo "4
+   1 1
+   2 2
+   3 1
+   3 3" | python src/main.py
+   ```
+
+5. **Ejecutar pruebas:**
+   ```bash
+   pytest tests/
+   ```
+
+### Algoritmo de la Solución
+
+La solución usa un patrón matemático en lugar de simular todo el espiral:
+- Si N ≤ M: Dirección final es **R** (N impar) o **L** (N par)
+- Si N > M: Dirección final es **D** (M impar) o **U** (M par)
+
+Complejidad temporal: O(1) por caso de prueba
+
+---
+
+## Ejercicio 2: Servicio Acortador de URLs
 
 ## Características
 
@@ -306,17 +391,6 @@ Usa el archivo `test_urls.txt` proporcionado para pruebas de carga masiva. El ar
 ## Solución de Problemas
 
 Consulta la [versión en inglés del README](./README.md#troubleshooting) para información detallada sobre solución de problemas.
-
-## Ejercicio 1
-
-El Ejercicio 1 es un script Python separado ubicado en el directorio `exercise1_python/`. Se puede ejecutar de forma independiente:
-
-```bash
-cd exercise1_python
-python src/main.py
-```
-
-Para más detalles, consulta el README en el directorio `exercise1_python/`.
 
 ## Licencia
 

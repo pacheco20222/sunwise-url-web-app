@@ -8,17 +8,102 @@ A full-stack URL shortener application built with Django REST Framework and Reac
 
 ## Table of Contents
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
-  - [Option 1: Using Docker (Recommended)](#option-1-using-docker-recommended)
-  - [Option 2: Manual Setup](#option-2-manual-setup)
-- [Usage](#usage)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-- [Exercise 1](#exercise-1)
+- [Exercise 1: Grid Spiral Direction](#exercise-1-grid-spiral-direction)
+- [Exercise 2: URL Shortener Service](#exercise-2-url-shortener-service)
+  - [Features](#features)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Installation & Setup](#installation--setup)
+  - [Usage](#usage)
+  - [API Documentation](#api-documentation)
+  - [Testing](#testing)
+  - [Troubleshooting](#troubleshooting)
+
+---
+
+## Exercise 1: Grid Spiral Direction
+
+A Python solution for the grid spiral walking problem.
+
+### Problem Description
+
+Starting at the top left corner of an N x M grid and facing towards the right, you walk one square at a time in the direction you are facing. If you reach the boundary of the grid or if the next square you are about to visit has already been visited, you turn right. You stop when all squares have been visited.
+
+**Question:** What direction will you be facing when you stop?
+
+**Example:** For a 3x3 grid, the path is: (0,0) → (0,1) → (0,2) → (1,2) → (2,2) → (2,1) → (2,0) → (1,0) → (1,1). Final direction: **Right (R)**
+
+### Input Specification
+
+- First line: T (number of test cases)
+- Next T lines: Two integers N and M (rows and columns)
+- Constraints: 1 ≤ T ≤ 5000, 1 ≤ N, M ≤ 10^9
+
+### Output Specification
+
+Output T lines with the final direction: **L** (left), **R** (right), **U** (up), or **D** (down)
+
+### Example
+
+**Input:**
+```
+4
+1 1
+2 2
+3 1
+3 3
+```
+
+**Output:**
+```
+R
+L
+D
+R
+```
+
+### Running Exercise 1
+
+1. **Navigate to the exercise1 directory:**
+   ```bash
+   cd exercise1_python
+   ```
+
+2. **Install dependencies (optional, only for testing):**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run with the provided input file:**
+   ```bash
+   python src/main.py < input.txt
+   ```
+
+4. **Or run with custom input:**
+   ```bash
+   echo "4
+   1 1
+   2 2
+   3 1
+   3 3" | python src/main.py
+   ```
+
+5. **Run tests:**
+   ```bash
+   pytest tests/
+   ```
+
+### Solution Algorithm
+
+The solution uses a mathematical pattern rather than simulating the entire spiral:
+- If N ≤ M: Final direction is **R** (odd N) or **L** (even N)
+- If N > M: Final direction is **D** (odd M) or **U** (even M)
+
+Time complexity: O(1) per test case
+
+---
+
+## Exercise 2: URL Shortener Service
 
 ## Features
 
@@ -412,17 +497,6 @@ If you encounter port conflicts:
 - Ensure Docker has enough resources (Settings > Resources)
 - Clear Docker cache: `docker-compose build --no-cache`
 - Remove old containers: `docker-compose down -v`
-
-## Exercise 1
-
-Exercise 1 is a separate Python script located in the `exercise1_python/` directory. It can be run independently:
-
-```bash
-cd exercise1_python
-python src/main.py
-```
-
-For more details, see the README in the `exercise1_python/` directory.
 
 ## License
 
